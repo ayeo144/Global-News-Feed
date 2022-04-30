@@ -4,4 +4,4 @@
 
 ### ETL
 
-![plot](./docs/imagesETL_Architecture.png)
+![Alt text](docs/imagesETL_Architecture.png?raw=true "Title")
