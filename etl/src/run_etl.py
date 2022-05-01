@@ -36,21 +36,21 @@ def run_extract():
     tstamp = datetime.datetime.now().strftime("%Y%md%d_%H%M%S")
     dirpath = os.path.join(root_dir, f"Responses_{tstamp}")
 
-    metadata = extract.persist(dirpath, storage=config["raw-storage"]["type"])
+    metadata_file = extract.persist(dirpath, storage=config["raw-storage"]["type"])
 
-    _add_raw_data_record(dirpath)
-
-    return metadata
+    _add_raw_data_record(dirpath, metadata_file)
 
 
-def _add_raw_data_record(path):
+def _add_raw_data_record(path, metadata_file):
     """
     Add the filepath of the new collection of responses to the database table.
     """
 
     session = SessionLocal()
 
-    new_record = APIDataRequests(**{"path": str(path)})
+    new_record = APIDataRequests(
+        **{"path": str(path), "metadata_file": str(metadata_file)}
+    )
     session.add(new_record)
 
     session.commit()

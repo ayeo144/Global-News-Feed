@@ -7,20 +7,22 @@ from pydantic import BaseModel
 
 
 class Loader:
-	"""
-	Load data from the extraction phase into the database.
+    """
+    Load data from the extraction phase into the database.
 
-	Data needs to be taken from the JSON files, useful content extracted
-	and then loaded into a database table.
-	"""
+    Data needs to be taken from the JSON files, useful content extracted
+    and then loaded into a database table.
 
-	...
+    Take metadata file created during Extract phase, read json files, add to db.
+    """
+
+    pass
 
 
 class Record(BaseModel):
-	"""
-	Data validation layer.
-	"""
+    """
+    Data validation layer.
+    """
 
     source: Optional[str] = None
     author: Optional[str] = None

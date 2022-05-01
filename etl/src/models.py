@@ -13,6 +13,7 @@ class APIDataRequests(Base):
 
     id = Column(Integer, primary_key=True)
     path = Column(String)
+    metadata_file = Column(String)
 
 
 class RawAPIData(Base):

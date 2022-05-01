@@ -37,15 +37,17 @@ class Extractor:
 
         for country in self.country_list:
 
-            articles = Extract.get_all_headlines(country)
+            articles = Extractor.get_all_headlines(country)
             self.responses[country] = articles
 
             if debug:
                 print(f"Found {len(articles)} for {country}")
 
-    def persist(self, dirpath: str, storage: str = "s3") -> dict:
+    def persist(self, dirpath: str, storage: str = "s3") -> str:
         """
-        Persist API JSON responses to JSON files in a storage location.
+        Persist API JSON responses to JSON files in a storage location. Save a 'metadata'
+        JSON file containing the countries and filepaths of JSON requests which can be
+        passed into the method for loading data from raw JSON dumps to the database.
         """
         metadata = {}
 
@@ -57,7 +59,7 @@ class Extractor:
 
                 dirpath = dirpath.replace("\\", "/")
                 fpath = dirpath + "/" + fname
-                Extract.save_articles_json_to_s3(self.responses[country], fpath)
+                Extractor.save_articles_json_to_s3(self.responses[country], fpath)
 
             if storage == "local":
 
@@ -68,11 +70,17 @@ class Extractor:
 
                 fpath = Path(dirpath, fname)
 
-                Extract.save_articles_json_to_local(self.responses[country], fpath)
+                Extractor.save_articles_json_to_local(self.responses[country], fpath)
 
             metadata[country] = fpath
 
-        return metadata
+        if storage == "s3":
+            metadata_file = dirpath.replace("\\", "/") + "/" + "METADATA.json"
+            Extractor._dict_to_s3_json(metadata, metadata_file)
+
+        elif storage == "local":
+            metadata_file = Path(dirpath, "METADATA.json")
+            Extractor._dict_to_local_json(metadata, metadata_file)
 
     @classmethod
     def get_all_headlines(cls, country: str) -> List[dict]:
@@ -164,10 +172,18 @@ class Extractor:
     def _find_duplicates(lst: list) -> list:
         return list(set([x for x in lst if lst.count(x) > 1]))
 
-    @staticmethod
-    def save_articles_json_to_s3(articles: List[dict], fpath: str):
+    @classmethod
+    def save_articles_json_to_s3(cls, articles: List[dict], fpath: str):
         """
         Save the list of articles from the API to JSON in an S3 bucket.
+        """
+
+        cls._dict_to_s3_json({"articles": articles}, fpath)
+
+    @staticmethod
+    def _dict_to_s3_json(content: dict, fpath: str):
+        """
+        Save a Python dictionary as a JSON in an S3 bucket.
         """
 
         aws_session = boto3.Session(
@@ -179,7 +195,7 @@ class Extractor:
         bucket_name = os.getenv("S3_BUCKET_NAME")
 
         s3_put_response = s3.put_object(
-            Body=json.dumps({"articles": articles}, ensure_ascii=False),
+            Body=json.dumps(content, ensure_ascii=False),
             Bucket=bucket_name,
             Key=fpath,
         )
@@ -188,14 +204,22 @@ class Extractor:
         if status_code != 200:
             raise Exception(f"S3 PUT status code = {status_code}!")
 
-    @staticmethod
-    def save_articles_json_to_local(articles: List[dict], fpath: str):
+    @classmethod
+    def save_articles_json_to_local(cls, articles: List[dict], fpath: Union[Path, str]):
         """
         Save the list of articles from the API to JSON on local storage.
         """
 
+        cls._dict_to_local_json({"articles": articles}, fpath)
+
+    @staticmethod
+    def _dict_to_local_json(content: dict, fpath: Union[Path, str]):
+        """
+        Save a Python dictionary to a local JSON file.
+        """
+
         with open(fpath, "wb") as f:
-            json.dumps({"articles": articles}, f)
+            json.dumps(content, f)
 
 
 if __name__ == "__main__":
@@ -207,11 +231,11 @@ if __name__ == "__main__":
 
     options = parser.parse_args()
 
-    extract = Extract(options.country)
+    extract = Extractor(options.country)
     extract.query()
 
     if options.path:
 
         extract.persist(path)
 
-    print(response)
+    print(extract.responses)
