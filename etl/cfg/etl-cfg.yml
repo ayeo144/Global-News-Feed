@@ -1,0 +1,11 @@
+query:
+  countries:
+    - "United Kingdom"
+    - "United States"
+    - "Australia"
+    - "New Zealand"
+    - "Canada"
+
+raw-storage:
+  type: s3
+  root-dir: RAW-NewsAPI-Responses

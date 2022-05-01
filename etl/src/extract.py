@@ -9,6 +9,8 @@ import boto3
 from dotenv import load_dotenv
 from newsapi import NewsApiClient
 
+from src.utils import read_config
+
 
 load_dotenv()
 
@@ -79,7 +81,7 @@ class Extract:
 
         articles = response_1["articles"] + response_2["articles"] + response_3["articles"]
 
-        return cls._remove_duplicate_articles(articles)
+        return articles
 
     @staticmethod
     def query_bbc_top_headlines_by_country(country: str, language: str = "en", page: int = 1) -> dict:
@@ -114,13 +116,9 @@ class Extract:
         """
         Get the ISO 3166-1 code for the country from the configuration file.
         """
-        config = cls._read_cfg(API_CFG)
+        
+        config = read_config(API_CFG)
         return config["countries"][country].lower()
-
-    @staticmethod
-    def _read_cfg(file: Union[Path, str]) -> dict:
-        with open(file) as f:
-            return yaml.load(f, Loader=yaml.FullLoader)
 
     @classmethod
     def _remove_duplicate_articles(cls, articles: List[dict]) -> List[dict]:
