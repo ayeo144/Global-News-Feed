@@ -3,9 +3,11 @@ boto3
 pyyaml
 requests
 pytest
+pydantic
 black
 numpy
 pandas
 sqlalchemy
+sqlalchemy_utils
 jupyter
 newsapi-python

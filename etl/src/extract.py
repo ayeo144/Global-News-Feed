@@ -15,10 +15,10 @@ from src.utils import read_config
 load_dotenv()
 
 API_KEY = os.getenv("NEWS_API_KEY")
-API_CFG = Path(Path(__file__).parent.parent, 'cfg', 'news-api-cfg.yml')
+API_CFG = Path(Path(__file__).parent.parent, "cfg", "news-api-cfg.yml")
 
 
-class Extract:
+class Extractor:
     """
     Class to handle extracting data from the NewsAPI for different countries.
     """
@@ -43,10 +43,11 @@ class Extract:
             if debug:
                 print(f"Found {len(articles)} for {country}")
 
-    def persist(self, dirpath: str, storage: str = "s3"):
+    def persist(self, dirpath: str, storage: str = "s3") -> dict:
         """
         Persist API JSON responses to JSON files in a storage location.
         """
+        metadata = {}
 
         for country in self.country_list:
 
@@ -69,6 +70,10 @@ class Extract:
 
                 Extract.save_articles_json_to_local(self.responses[country], fpath)
 
+            metadata[country] = fpath
+
+        return metadata
+
     @classmethod
     def get_all_headlines(cls, country: str) -> List[dict]:
         """
@@ -79,21 +84,29 @@ class Extract:
         response_2 = cls.get_top_headlines_for_country(country)
         response_3 = cls.query_bbc_top_headlines_by_country(country)
 
-        articles = response_1["articles"] + response_2["articles"] + response_3["articles"]
+        articles = (
+            response_1["articles"] + response_2["articles"] + response_3["articles"]
+        )
 
         return articles
 
     @staticmethod
-    def query_bbc_top_headlines_by_country(country: str, language: str = "en", page: int = 1) -> dict:
+    def query_bbc_top_headlines_by_country(
+        country: str, language: str = "en", page: int = 1
+    ) -> dict:
         """
         Query the top BBC News headlines using the country name as a keyword.
         """
 
         api = NewsApiClient(api_key=API_KEY)
-        return api.get_top_headlines(q=country, sources="bbc-news", language=language, page=page)
+        return api.get_top_headlines(
+            q=country, sources="bbc-news", language=language, page=page
+        )
 
     @staticmethod
-    def query_all_top_headlines_by_country(country: str, language: str = "en", page: int = 1) -> dict:
+    def query_all_top_headlines_by_country(
+        country: str, language: str = "en", page: int = 1
+    ) -> dict:
         """
         Query all top headlines using the country name a keyword for the query.
         """
@@ -102,7 +115,9 @@ class Extract:
         return api.get_top_headlines(q=country, language=language, page=page)
 
     @classmethod
-    def get_top_headlines_for_country(cls, country: str, language: str = "en", page: int = 1) -> dict:
+    def get_top_headlines_for_country(
+        cls, country: str, language: str = "en", page: int = 1
+    ) -> dict:
         """
         Get the top headlines for a country from the API for specific country-code.
         """
@@ -116,7 +131,7 @@ class Extract:
         """
         Get the ISO 3166-1 code for the country from the configuration file.
         """
-        
+
         config = read_config(API_CFG)
         return config["countries"][country].lower()
 
@@ -130,19 +145,19 @@ class Extract:
         Returns the list of unique articles.
         """
 
-        unique_urls_dict = {a['url']: i for i, a in enumerate(articles)}
-        all_urls_list = [a['url'] for a in articles]
+        unique_urls_dict = {a["url"]: i for i, a in enumerate(articles)}
+        all_urls_list = [a["url"] for a in articles]
 
         removed_urls = []
 
         for dupe_url in cls._find_duplicates(all_urls_list):
-            
+
             if dupe_url not in removed_urls:
-                
+
                 index = unique_urls_dict[dupe_url]
                 articles.pop(index)
                 removed_urls.append(dupe_url)
-                
+
         return articles
 
     @staticmethod
@@ -159,17 +174,17 @@ class Extract:
             aws_access_key_id=os.getenv("AWS_ACCESS_KEY"),
             aws_secret_access_key=os.getenv("AWS_SECRET_KEY"),
         )
-        s3 = aws_session.client('s3')
+        s3 = aws_session.client("s3")
 
         bucket_name = os.getenv("S3_BUCKET_NAME")
 
         s3_put_response = s3.put_object(
-            Body=json.dumps({"articles": articles}, ensure_ascii=False), 
+            Body=json.dumps({"articles": articles}, ensure_ascii=False),
             Bucket=bucket_name,
             Key=fpath,
         )
 
-        status_code = s3_put_response["ResponseMetadata"]["HTTPStatusCode"] 
+        status_code = s3_put_response["ResponseMetadata"]["HTTPStatusCode"]
         if status_code != 200:
             raise Exception(f"S3 PUT status code = {status_code}!")
 
@@ -183,7 +198,7 @@ class Extract:
             json.dumps({"articles": articles}, f)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 

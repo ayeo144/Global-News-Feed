@@ -2,18 +2,18 @@ import os
 import datetime
 from pathlib import Path
 
-from src.extract import Extract
+from src.extract import Extractor
 from src.utils import read_config
 from src.db import engine, SessionLocal
 from src.models import Base, APIDataRequests
 
 
-ETL_CFG = Path(Path(__file__).parent.parent, 'cfg', 'etl-cfg.yml')
+ETL_CFG = Path(Path(__file__).parent.parent, "cfg", "etl-cfg.yml")
 
 Base.metadata.create_all(bind=engine)
 
 
-def run():
+def run_extract():
     """
     Run the ETL process.
 
@@ -26,7 +26,7 @@ def run():
     countries = config["query"]["countries"]
 
     # Extract data
-    extract = Extract(countries)
+    extract = Extractor(countries)
     extract.query()
 
     # Persist data
@@ -36,9 +36,11 @@ def run():
     tstamp = datetime.datetime.now().strftime("%Y%md%d_%H%M%S")
     dirpath = os.path.join(root_dir, f"Responses_{tstamp}")
 
-    extract.persist(dirpath, storage=config["raw-storage"]["type"])
+    metadata = extract.persist(dirpath, storage=config["raw-storage"]["type"])
 
     _add_raw_data_record(dirpath)
+
+    return metadata
 
 
 def _add_raw_data_record(path):
