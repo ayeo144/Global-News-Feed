@@ -1,0 +1,11 @@
+python-dotenv
+boto3
+pyyaml
+requests
+pytest
+black
+numpy
+pandas
+sqlalchemy
+jupyter
+newsapi-python

@@ -1,0 +1,54 @@
+countries:
+  Afghanistan: AF
+  Albania: AL
+  Argentina: AR
+  Australia: AU
+  Austria: AT
+  Belgium: BE
+  Brazil: BR
+  Bulgaria: BG
+  Canada: CA
+  China: CN
+  Colombia: CO
+  Cuba: CU
+  Czech Republic: CZ
+  Egypt: EG
+  France: FR
+  Germany: DE
+  Hong Kong: HK
+  Hungary: HU
+  India: IN
+  Indonesia: ID
+  Ireland: IE
+  Israel: IL
+  Italy: IT
+  Japan: JP
+  Korea: KR
+  Latvia: LV
+  Lithuania: LT
+  Malaysia: MY
+  Mexico: MX
+  Morocco: MA
+  Netherlands: NL
+  New Zealand: NZ
+  Nigeria: NG
+  Norway: "NO"
+  Philippines: PH
+  Poland: PL
+  Portugal: PT
+  Romania: RO
+  Russia: RU
+  Saudi Arabia: SA
+  Serbia: RS
+  Singapore: SG
+  Slovakia: SK
+  Slovenia: SI
+  South Africa: ZA
+  Switzerland: CH
+  Thailand: TH
+  Turkey: TR
+  Ukraine: UA
+  United Arab Emirates: AE
+  United Kingdom: GB
+  United States: US
+  Venezuela: VE
