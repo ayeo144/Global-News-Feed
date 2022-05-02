@@ -15,7 +15,7 @@ Base.metadata.create_all(bind=engine)
 
 def run_extract():
     """
-    Run the ETL process.
+    Run the E process.
 
         1. Query API and get JSON response.
         2. Save JSON responses to files.
@@ -30,13 +30,12 @@ def run_extract():
     extract.query()
 
     # Persist data
-    storage_type = config["raw-storage"]["type"]
     root_dir = config["raw-storage"]["root-dir"]
 
     tstamp = datetime.datetime.now().strftime("%Y%md%d_%H%M%S")
     dirpath = os.path.join(root_dir, f"Responses_{tstamp}")
 
-    metadata_file = extract.persist(dirpath, storage=config["raw-storage"]["type"])
+    metadata_file = extract.persist_to_s3(dirpath)
 
     _add_raw_data_record(dirpath, metadata_file)
 
