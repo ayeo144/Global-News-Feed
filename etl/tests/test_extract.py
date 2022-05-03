@@ -19,6 +19,8 @@ def test_Extractor(env_file, test_data_dir):
 
     load_dotenv(str(env_file))
 
+    bucket_name = os.getenv("S3_BUCKET_NAME")
+
     country = "United Kingdom"
 
     extractor = Extractor(country)
@@ -29,12 +31,14 @@ def test_Extractor(env_file, test_data_dir):
     assert country in api_results.keys()
     assert isinstance(api_results[country], list)
 
-    metadata = extractor.persist_to_s3(test_data_dir)
+    metadata_file = extractor.persist_to_s3(test_data_dir)
+
+    metadata = S3Utils.json_to_dict(bucket_name, metadata_file)
 
     assert country in metadata.keys()
 
     # Clean-up
-    S3Utils.delete_object(os.getenv("S3_BUCKET_NAME"), metadata[country])
+    S3Utils.delete_object(bucket_name, metadata[country])
     S3Utils.delete_object(
-        os.getenv("S3_BUCKET_NAME"), (test_data_dir + "/" + "METADATA.json")
+        bucket_name, (test_data_dir + "/" + "METADATA.json")
     )
