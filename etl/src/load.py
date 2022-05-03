@@ -49,17 +49,23 @@ class Loader:
         for country, json_file in self.metadata.items():
 
             json_data = S3Utils.json_to_dict(Loader.S3_BUCKET, json_file)
-            articles_df = Loader.prepare_country_articles(json_data["articles"], country)
+            articles_df = Loader.prepare_country_articles(
+                json_data["articles"], country
+            )
             Loader.records_to_sql(articles_df)
 
     @classmethod
-    def prepare_country_articles(cls, articles: List[dict], country: str) -> pd.DataFrame:
+    def prepare_country_articles(
+        cls, articles: List[dict], country: str
+    ) -> pd.DataFrame:
         """
         Take a list of news articles stored in dictionaries and prepare them
         for upload to the database.
         """
 
-        articles_list = [cls.prepare_article(article, country).dict() for article in articles]
+        articles_list = [
+            cls.prepare_article(article, country).dict() for article in articles
+        ]
         articles_df = pd.DataFrame(articles_list)
         articles_df = articles_df.drop_duplicates()
 
@@ -72,7 +78,9 @@ class Loader:
             author=article["author"],
             title=article["title"],
             url=article["url"],
-            publish_date=datetime.datetime.strptime(article["publishedAt"][0:10], "%Y-%m-%d"),
+            publish_date=datetime.datetime.strptime(
+                article["publishedAt"][0:10], "%Y-%m-%d"
+            ),
             country=country,
             date=datetime.date.today(),
         )

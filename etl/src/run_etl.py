@@ -63,8 +63,7 @@ def _add_raw_data_record(path, metadata_file):
 
 
 def run_load():
-    """
-    """
+    """ """
 
     metadata_file = _get_last_metadata_file()
     metadata = S3Utils.json_to_dict(os.getenv("S3_BUCKET_NAME"), metadata_file)

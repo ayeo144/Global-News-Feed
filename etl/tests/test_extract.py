@@ -39,6 +39,4 @@ def test_Extractor(env_file, test_data_dir):
 
     # Clean-up
     S3Utils.delete_object(bucket_name, metadata[country])
-    S3Utils.delete_object(
-        bucket_name, (test_data_dir + "/" + "METADATA.json")
-    )
+    S3Utils.delete_object(bucket_name, (test_data_dir + "/" + "METADATA.json"))
