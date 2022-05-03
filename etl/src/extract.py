@@ -67,7 +67,7 @@ class Extractor:
         metadata_file = dirpath + "/" + "METADATA.json"
         S3Utils.dict_to_json(metadata, Extractor.S3_BUCKET, metadata_file)
 
-        return metadata
+        return metadata_file
 
     @classmethod
     def get_all_headlines(cls, country: str) -> List[dict]:

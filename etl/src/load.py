@@ -24,7 +24,7 @@ class Article(BaseModel):
     author: Optional[str] = None
     title: Optional[str] = None
     url: Optional[str] = None
-    publish_date: Optional[datetime.datetime] = None
+    publish_date: Optional[datetime.date] = None
     country: str
     date: datetime.date
 
@@ -60,7 +60,7 @@ class Loader:
         """
 
         articles_list = [cls.prepare_article(article, country).dict() for article in articles]
-        articles_df = pd.DataFrame(records_list)
+        articles_df = pd.DataFrame(articles_list)
         articles_df = articles_df.drop_duplicates()
 
         return articles_df
@@ -72,11 +72,11 @@ class Loader:
             author=article["author"],
             title=article["title"],
             url=article["url"],
-            publish_date=datetime.strptime(article["publishedAt"], "%Y-%m-%dT%H:%M:%SZ"),
+            publish_date=datetime.datetime.strptime(article["publishedAt"][0:10], "%Y-%m-%d"),
             country=country,
             date=datetime.date.today(),
         )
 
     @staticmethod
     def records_to_sql(df: pd.DataFrame):
-        df.to_sql(RawAPIData.__tablename__, engine, if_exists="append")
+        df.to_sql(RawAPIData.__tablename__, engine, if_exists="append", index=False)

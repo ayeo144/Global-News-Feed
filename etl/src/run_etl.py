@@ -1,15 +1,18 @@
 import os
-import json
 import datetime
 from pathlib import Path
 from typing import Dict
 
+from dotenv import load_dotenv
+
 from src.extract import Extractor
 from src.load import Loader
-from src.utils import read_config
 from src.db import engine, SessionLocal
+from src.utils import read_config, S3Utils
 from src.models import Base, APIDataRequests, RawAPIData
 
+
+load_dotenv()
 
 ETL_CFG = Path(Path(__file__).parent.parent, "cfg", "etl-cfg.yml")
 
@@ -63,15 +66,11 @@ def run_load():
     """
     """
 
-    metadata = _read_metadata_file(_get_last_metadata_file())
+    metadata_file = _get_last_metadata_file()
+    metadata = S3Utils.json_to_dict(os.getenv("S3_BUCKET_NAME"), metadata_file)
 
     loader = Loader(metadata)
     loader.upload()
-
-
-def _read_metadata_file(metadata_file: str) -> Dict[str, list]:
-    with open(metadata_file) as f:
-        return json.loads(f)
 
 
 def _get_last_metadata_file() -> str:
