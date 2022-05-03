@@ -1,11 +1,14 @@
 import os
+import json
 import datetime
 from pathlib import Path
+from typing import Dict
 
 from src.extract import Extractor
+from src.load import Loader
 from src.utils import read_config
 from src.db import engine, SessionLocal
-from src.models import Base, APIDataRequests
+from src.models import Base, APIDataRequests, RawAPIData
 
 
 ETL_CFG = Path(Path(__file__).parent.parent, "cfg", "etl-cfg.yml")
@@ -54,3 +57,29 @@ def _add_raw_data_record(path, metadata_file):
 
     session.commit()
     session.close()
+
+
+def run_load():
+    """
+    """
+
+    metadata = _read_metadata_file(_get_last_metadata_file())
+
+    loader = Loader(metadata)
+    loader.upload()
+
+
+def _read_metadata_file(metadata_file: str) -> Dict[str, list]:
+    with open(metadata_file) as f:
+        return json.loads(f)
+
+
+def _get_last_metadata_file() -> str:
+    session = SessionLocal()
+
+    record = session.query(APIDataRequests).order_by(APIDataRequests.id.desc()).first()
+    metadata_file = record.metadata_file
+
+    session.close()
+
+    return metadata_file

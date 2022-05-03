@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, DateTime
+from sqlalchemy import Column, String, Integer, DateTime, Date
 
 from src.db import Base
 
@@ -23,10 +23,11 @@ class RawAPIData(Base):
 
     __tablename__ = "raw_api_data"
 
-    id = Column(Integer, primary_key)
+    id = Column(Integer, primary_key=True)
     source = Column(String)
     author = Column(String)
     title = Column(String)
     url = Column(String)
     publish_date = Column(DateTime)
-    country = Column(String, required=True)
+    country = Column(String, nullable=False)
+    date = Column(Date, nullable=False)
