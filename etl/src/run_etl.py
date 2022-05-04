@@ -63,7 +63,10 @@ def _add_raw_data_record(path, metadata_file):
 
 
 def run_load():
-    """ """
+    """ 
+    Take the data extracted from the API and saved as JSON files, and upload
+    the records to a database table.
+    """
 
     metadata_file = _get_last_metadata_file()
     metadata = S3Utils.json_to_dict(os.getenv("S3_BUCKET_NAME"), metadata_file)

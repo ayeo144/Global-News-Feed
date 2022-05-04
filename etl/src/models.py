@@ -28,6 +28,6 @@ class RawAPIData(Base):
     author = Column(String)
     title = Column(String)
     url = Column(String)
-    publish_date = Column(DateTime)
+    publish_date = Column(Date)
     country = Column(String, nullable=False)
-    date = Column(Date, nullable=False)
+    timestamp = Column(DateTime, nullable=False)

@@ -26,7 +26,7 @@ class Article(BaseModel):
     url: Optional[str] = None
     publish_date: Optional[datetime.date] = None
     country: str
-    date: datetime.date
+    timestamp: datetime.datetime
 
 
 class Loader:
@@ -46,17 +46,19 @@ class Loader:
 
     def upload(self):
 
+        timestamp = datetime.datetime.utcnow()
+
         for country, json_file in self.metadata.items():
 
             json_data = S3Utils.json_to_dict(Loader.S3_BUCKET, json_file)
             articles_df = Loader.prepare_country_articles(
-                json_data["articles"], country
+                json_data["articles"], country, timestamp
             )
             Loader.records_to_sql(articles_df)
 
     @classmethod
     def prepare_country_articles(
-        cls, articles: List[dict], country: str
+        cls, articles: List[dict], country: str, timestamp: datetime.datetime
     ) -> pd.DataFrame:
         """
         Take a list of news articles stored in dictionaries and prepare them
@@ -64,7 +66,7 @@ class Loader:
         """
 
         articles_list = [
-            cls.prepare_article(article, country).dict() for article in articles
+            cls.prepare_article(article, country, timestamp).dict() for article in articles
         ]
         articles_df = pd.DataFrame(articles_list)
         articles_df = articles_df.drop_duplicates()
@@ -72,7 +74,7 @@ class Loader:
         return articles_df
 
     @staticmethod
-    def prepare_article(article: dict, country: str) -> Article:
+    def prepare_article(article: dict, country: str, timestamp: datetime.datetime) -> Article:
         return Article(
             source=article["source"]["name"],
             author=article["author"],
@@ -82,7 +84,7 @@ class Loader:
                 article["publishedAt"][0:10], "%Y-%m-%d"
             ),
             country=country,
-            date=datetime.date.today(),
+            tiimestamp=timestamp,
         )
 
     @staticmethod
