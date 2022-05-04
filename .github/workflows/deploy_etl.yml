@@ -42,5 +42,5 @@ jobs:
         --build-arg AWS_DB_PASSWORD=${{secrets.AWS_DB_PASSWORD}} \
         --build-arg AWS_DB_HOST=${{secrets.AWS_DB_HOST}} \
         --build-arg AWS_DB_PORT=${{secrets.AWS_DB_PORT}} \
-        --build-arg AWS_DB_NAME=${{secrets.AWS_DB_NAME}} \ .
+        --build-arg AWS_DB_NAME=${{secrets.AWS_DB_NAME}} .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
