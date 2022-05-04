@@ -9,5 +9,8 @@ COPY . /code/
 # install the requirements
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
+# run tests
+RUN pytest -v /code/tests
+
 # run the API
 CMD ["python", "/code/run.py"]
