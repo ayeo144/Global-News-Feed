@@ -2,8 +2,6 @@ import os
 import sys
 from pathlib import Path
 
-from dotenv import load_dotenv
-
 SRC_DIR = Path(Path(__file__).parent.parent)
 sys.path.insert(0, str(SRC_DIR))
 
@@ -16,8 +14,6 @@ def test_Extractor(test_data_dir):
     Test the Extractor class for querying the NewsAPI and persisting
     results as JSON files to an S3 bucket.
     """
-
-    #load_dotenv(str(env_file))
 
     bucket_name = os.getenv("S3_BUCKET_NAME")
 

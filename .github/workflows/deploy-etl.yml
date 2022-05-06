@@ -4,6 +4,11 @@ on: push
 
 jobs:
   
+  # Build the Docker image containing the ETL code and push it to
+  # an AWS Elastic Container Repository for use in other AWS services.
+  #
+  # Unit tests for the code are run during building the Docker image, 
+  # hencenthere is not 'test' step in this pipeline.
   build:
     
     name: Build Image
@@ -30,6 +35,9 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: global-news-feed
         IMAGE_TAG: etl_image
+      # During building the image we need to pass important environment variables
+      # from Github Actions secrets to the Docker image, which are required for the
+      # ETL code to interact with API's an AWS services.
       run: |
         cd etl
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
