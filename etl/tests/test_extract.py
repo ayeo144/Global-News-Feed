@@ -19,9 +19,7 @@ def test_Extractor(test_data_dir):
 
     #load_dotenv(str(env_file))
 
-    bucket_name = os.getenv("S3_BUCKET_NAME", None)
-    if bucket_name is None:
-        raise Exception
+    bucket_name = os.getenv("S3_BUCKET_NAME")
 
     country = "United Kingdom"
 

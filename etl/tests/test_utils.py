@@ -10,7 +10,7 @@ sys.path.insert(0, str(SRC_DIR))
 from src.utils import S3Utils
 
 
-def test_S3Utils_dict_to_json(env_file, test_data_dir):
+def test_S3Utils_dict_to_json(test_data_dir):
     """
     Test the upload, download and deleting of JSON data to/from
     an AWS S3 bucket.
@@ -18,8 +18,6 @@ def test_S3Utils_dict_to_json(env_file, test_data_dir):
     This test requires AWS credentials and as S3 bucket defined in
     the environment file.
     """
-
-    load_dotenv(str(env_file))
 
     test_dict = {
         "id": 1,
