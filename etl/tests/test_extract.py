@@ -11,15 +11,17 @@ from src.utils import S3Utils
 from src.extract import Extractor
 
 
-def test_Extractor(env_file, test_data_dir):
+def test_Extractor(test_data_dir):
     """
     Test the Extractor class for querying the NewsAPI and persisting
     results as JSON files to an S3 bucket.
     """
 
-    load_dotenv(str(env_file))
+    #load_dotenv(str(env_file))
 
-    bucket_name = os.getenv("S3_BUCKET_NAME")
+    bucket_name = os.getenv("S3_BUCKET_NAME", None)
+    is bucket_name is None:
+        raise Exception
 
     country = "United Kingdom"
 
