@@ -5,13 +5,11 @@ from pathlib import Path
 from typing import Union, List
 
 import yaml
-from dotenv import load_dotenv
 from newsapi import NewsApiClient
 
 from src.utils import S3Utils, read_config
+from src.config import Env
 
-
-load_dotenv()
 
 API_CFG = Path(Path(__file__).parent.parent, "cfg", "news-api-cfg.yml")
 
@@ -21,8 +19,8 @@ class Extractor:
     Class to handle extracting data from the NewsAPI for different countries.
     """
 
-    API = NewsApiClient(api_key=os.getenv("NEWS_API_KEY"))
-    S3_BUCKET = os.getenv("S3_BUCKET_NAME")
+    API = NewsApiClient(api_key=Env.NEWS_API_KEY)
+    S3_BUCKET = Env.S3_BUCKET_NAME
 
     def __init__(self, country: Union[str, List[str]]):
         if isinstance(country, str):

@@ -7,6 +7,7 @@ sys.path.insert(0, str(SRC_DIR))
 
 from src.utils import S3Utils
 from src.extract import Extractor
+from src.config import Env
 
 
 def test_Extractor(test_data_dir):
@@ -15,7 +16,7 @@ def test_Extractor(test_data_dir):
     results as JSON files to an S3 bucket.
     """
 
-    bucket_name = os.getenv("S3_BUCKET_NAME")
+    bucket_name = Env.S3_BUCKET_NAME
 
     country = "United Kingdom"
 

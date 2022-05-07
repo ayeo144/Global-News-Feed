@@ -6,6 +6,7 @@ SRC_DIR = Path(Path(__file__).parent.parent)
 sys.path.insert(0, str(SRC_DIR))
 
 from src.utils import S3Utils
+from src.config import Env
 
 
 def test_S3Utils_dict_to_json(test_data_dir):
@@ -25,12 +26,12 @@ def test_S3Utils_dict_to_json(test_data_dir):
     test_json = test_data_dir + "/" + "test.json"
 
     # upload to S3
-    S3Utils.dict_to_json(test_dict, os.getenv("S3_BUCKET_NAME"), test_json)
+    S3Utils.dict_to_json(test_dict, Env.S3_BUCKET_NAME, test_json)
 
     # download from S3
-    dict_from_s3 = S3Utils.json_to_dict(os.getenv("S3_BUCKET_NAME"), test_json)
+    dict_from_s3 = S3Utils.json_to_dict(Env.S3_BUCKET_NAME, test_json)
 
     # delete test object
-    S3Utils.delete_object(os.getenv("S3_BUCKET_NAME"), test_json)
+    S3Utils.delete_object(Env.S3_BUCKET_NAME, test_json)
 
     assert dict_from_s3 == test_dict

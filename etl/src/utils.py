@@ -6,10 +6,8 @@ from typing import Union
 import yaml
 import boto3
 import botocore.client
-from dotenv import load_dotenv
 
-
-load_dotenv()
+from src.config import Env
 
 
 class S3RequestError(Exception):
@@ -27,8 +25,8 @@ class AWSUtils:
     Helper class for working with AWS services.
     """
 
-    ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
-    SECRET_KEY = os.getenv("AWS_SECRET_KEY")
+    ACCESS_KEY = Env.AWS_ACCESS_KEY
+    SECRET_KEY = Env.AWS_SECRET_KEY
 
     @classmethod
     def get_s3(cls) -> botocore.client.BaseClient:

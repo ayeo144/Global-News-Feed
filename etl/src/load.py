@@ -5,14 +5,11 @@ from typing import Optional, List, Dict
 
 import pandas as pd
 from pydantic import BaseModel
-from dotenv import load_dotenv
 
 from src.db import engine
 from src.utils import S3Utils
 from src.models import RawAPIData
-
-
-load_dotenv()
+from src.config import Env
 
 
 class Article(BaseModel):
@@ -39,7 +36,7 @@ class Loader:
     Take metadata file created during Extract phase, read json files, add to db.
     """
 
-    S3_BUCKET = os.getenv("S3_BUCKET_NAME")
+    S3_BUCKET = Env.S3_BUCKET_NAME
 
     def __init__(self, metadata: Dict[str, list]):
         self.metadata = metadata
