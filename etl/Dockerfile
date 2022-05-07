@@ -24,6 +24,9 @@ ENV AWS_DB_HOST ${AWS_DB_HOST}
 ENV AWS_DB_PORT ${AWS_DB_PORT}
 ENV AWS_DB_NAME ${AWS_DB_NAME}
 
+# Required for psycopg2
+RUN sudo apt-get install libpq-dev python-dev
+
 # this creates the working directory inside our container
 WORKDIR code/
 
