@@ -15,7 +15,6 @@ def test_Env_variables():
     assert Env.AWS_ACCESS_KEY not in invalid_var
     assert Env.AWS_SECRET_KEY not in invalid_var
     assert Env.S3_BUCKET_NAME not in invalid_var
-    assert Env.AWS_DB_INSTANCE_ID not in invalid_var
     assert Env.AWS_DB_USERNAME not in invalid_var
     assert Env.AWS_DB_PASSWORD not in invalid_var
     assert Env.AWS_DB_HOST not in invalid_var
