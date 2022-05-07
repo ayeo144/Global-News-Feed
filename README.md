@@ -31,3 +31,8 @@ The path of the timestamped directory is recorded in a table in a database for f
 up-to-date set of API responses to be easily identified and accessed.
 
 #### Loading "Raw" Data into a Database
+
+## Notes
+
+* When using secrets in Github Actions, remember to use `\` before any special characters (e.g. `$`, `.`) otherwise
+they will not be properly loaded.

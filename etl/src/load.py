@@ -81,7 +81,7 @@ class Loader:
                 article["publishedAt"][0:10], "%Y-%m-%d"
             ),
             country=country,
-            tiimestamp=timestamp,
+            timestamp=timestamp,
         )
 
     @staticmethod
