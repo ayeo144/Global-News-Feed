@@ -47,7 +47,7 @@ jobs:
         --build-arg S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }} \
         --build-arg AWS_DB_INSTANCE_ID=${{ secrets.AWS_DB_INSTANCE }} \
         --build-arg AWS_DB_USERNAME=${{ secrets.AWS_DB_USERNAME }} \
-        --build-arg AWS_DB_PASSWORD=${{ secrets.AWS_DB_PASSWORD }} \
+        --build-arg AWS_DB_PASSWORD=$${{ secrets.AWS_DB_PASSWORD }} \
         --build-arg AWS_DB_HOST=${{ secrets.AWS_DB_HOST }} \
         --build-arg AWS_DB_PORT=${{ secrets.AWS_DB_PORT }} \
         --build-arg AWS_DB_NAME=${{ secrets.AWS_DB_NAME }} .
