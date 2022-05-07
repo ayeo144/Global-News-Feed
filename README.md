@@ -36,3 +36,16 @@ up-to-date set of API responses to be easily identified and accessed.
 
 * When using secrets in Github Actions, remember to use `\` before any special characters (e.g. `$`, `.`) otherwise
 they will not be properly loaded.
+
+## AWS Cheat-Sheet
+
+Commands I frequently needed to use...
+
+1. Connecting to EC2 instance from Windows command:
+	* ssh -i path/to/private-key.pem ubuntu@ec2-public-dns
+
+2. Configuring AWS CLI:
+	* aws configure
+
+3. Logging in to AWS ECR on an EC2 instance, and configuring Docker to pull images from ECR:
+	* aws ecr get-login-password --region region | docker login --username AWS --password-stdin aws_account_id.dkr.ecr.region.amazonaws.com
