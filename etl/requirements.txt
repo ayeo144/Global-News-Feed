@@ -8,6 +8,7 @@ black
 numpy
 pandas
 sqlalchemy
-sqlalchemy_utils
+sqlalchemy-utils
+pyscopg2
 jupyter
 newsapi-python
