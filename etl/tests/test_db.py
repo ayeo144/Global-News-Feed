@@ -9,9 +9,12 @@ from src.db import engine
 
 def test_db_connection():
 
+	connection = None
+
 	try:
 		connection = engine.connect()
 	except Exception as e:
 		raise e
 	finally:
-		connection.close()
+		if connection is not None:
+			connection.close()
