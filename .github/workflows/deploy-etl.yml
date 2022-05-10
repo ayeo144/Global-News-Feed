@@ -1,6 +1,16 @@
 name: Deploy to ECR
 
-on: push
+on: 
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: eu-west-2     
+  ECS_SERVICE: global-news-feed-service
+  ECS_CLUSTER: global-news-feed-cluster     
+  ECS_TASK_DEFINITION: .aws/ecs-etl-task.json 
+  CONTAINER_NAME: global-news-feed-etl-container
 
 jobs:
   
@@ -24,7 +34,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-        aws-region: eu-west-2
+        aws-region: ${{ env.AWS_REGION }}
 
     - name: Login to Amazon ECR
       id: login-ecr
@@ -34,7 +44,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: global-news-feed
-        IMAGE_TAG: etl_image
+        IMAGE_TAG: etl_image   
       # During building the image we need to pass important environment variables
       # from Github Actions secrets to the Docker image, which are required for the
       # ETL code to interact with API's an AWS services.
@@ -52,3 +62,21 @@ jobs:
         --build-arg AWS_DB_PORT=${{ secrets.AWS_DB_PORT }} \
         --build-arg AWS_DB_NAME=${{ secrets.AWS_DB_NAME }} .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@97587c9d45a4930bf0e3da8dd2feb2a463cf4a3a
+      with:
+        task-definition: ${{ env.ECS_TASK_DEFINITION }}
+        container-name: ${{ env.CONTAINER_NAME }}
+        image: ${{ steps.build-image.outputs.image }}
+
+    - name: Run Task on Amazon ECS
+      uses: smitp/amazon-ecs-run-task@v1
+      with:
+        task-definition: ${{ env.ECS_TASK_DEFINITION }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        count: 1
+        started-by: github-actions-${{ github.actor }}
+        wait-for-finish: true
