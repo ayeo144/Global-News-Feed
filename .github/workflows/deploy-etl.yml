@@ -75,6 +75,5 @@ jobs:
         cpu: 256
         memory: 512
         exec_role: 'ecsTaskExecutionRoleDefault'
-        aws_role_arn: ${{ secrets.AWS_ROLE_ARN }}
         wait: true
         timeout: 600
