@@ -70,7 +70,6 @@ jobs:
       with:
         project: 'examples'
         name: 'global-news-feed-task'
-        image: 'myrepo.example.com/my-image'
         image: ${{ steps.build-image.outputs.image }}
         version: 'latest'
         cpu: 256
