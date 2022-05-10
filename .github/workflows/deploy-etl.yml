@@ -76,7 +76,7 @@ jobs:
     - name: Run Task on Amazon ECS
       uses: smitp/amazon-ecs-run-task@v1
       with:
-        task-definition: ${{ env.ECS_TASK_DEFINITION }}
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
         cluster: ${{ env.ECS_CLUSTER }}
         count: 1
         started-by: github-actions-${{ github.actor }}
