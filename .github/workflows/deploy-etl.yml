@@ -7,7 +7,6 @@ on:
 
 env:
   AWS_REGION: eu-west-2     
-  ECS_SERVICE: global-news-feed-service
   ECS_CLUSTER: global-news-feed-cluster     
   ECS_TASK_DEFINITION: .aws/ecs-etl-task.json 
   CONTAINER_NAME: global-news-feed-etl-container
@@ -69,6 +68,7 @@ jobs:
       uses: apfm-actions/aws-ecs-exec-action@master
       with:
         project: 'examples'
+        cluster: ${{ env.ECS_CLUSTER }}
         name: 'global-news-feed-task'
         image: ${{ steps.build-image.outputs.image }}
         version: 'latest'
