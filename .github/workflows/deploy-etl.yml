@@ -55,12 +55,12 @@ jobs:
         --build-arg AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }} \
         --build-arg AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }} \
         --build-arg S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }} \
-        --build-arg AWS_DB_INSTANCE_ID=${{ secrets.AWS_DB_INSTANCE }} \
-        --build-arg AWS_DB_USERNAME=${{ secrets.AWS_DB_USERNAME }} \
-        --build-arg AWS_DB_PASSWORD=${{ secrets.AWS_DB_PASSWORD }} \
-        --build-arg AWS_DB_HOST=${{ secrets.AWS_DB_HOST }} \
-        --build-arg AWS_DB_PORT=${{ secrets.AWS_DB_PORT }} \
-        --build-arg AWS_DB_NAME=${{ secrets.AWS_DB_NAME }} .
+        --build-arg DB_USERNAME=${{ secrets.DB_USERNAME }} \
+        --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+        --build-arg DB_HOST=${{ secrets.DB_HOST }} \
+        --build-arg DB_PORT=${{ secrets.DB_PORT }} \
+        --build-arg DB_NAME=${{ secrets.DB_NAME }} \
+        -f production.Dockerfile .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 

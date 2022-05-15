@@ -15,9 +15,20 @@ class S3RequestError(Exception):
         super().__init__(message)
 
 
-def read_config(file: Union[Path, str]) -> dict:
+def read_config(file: Union[Path, str], loader="yaml") -> dict:
     with open(file) as f:
-        return yaml.load(f, Loader=yaml.FullLoader)
+        if loader == "yaml":
+            return _read_yaml_config(f)
+        elif loader == "json":
+            return _read_json_config(f)
+
+
+def _read_yaml_config(file_obj) -> dict:
+    return yaml.load(file_obj, Loader=yaml.FullLoader)
+
+
+def _read_json_config(file_obj) -> dict:
+    return json.load(file_obj)
 
 
 class AWSUtils:

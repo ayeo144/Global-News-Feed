@@ -8,10 +8,3 @@ query:
 
 raw-storage:
   root-dir: RAW-NewsAPI-Responses
-
-spatial-data:
-  countries:
-    
-    United Kingdom:
-      x: 1
-      y: 1

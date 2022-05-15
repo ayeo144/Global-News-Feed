@@ -1,6 +1,19 @@
-from sqlalchemy import Column, String, Integer, DateTime, Date
+from sqlalchemy import Column, String, Integer, DateTime, Date, Float
 
 from src.db import Base
+
+
+class CountryLocations(Base):
+    """
+    Table to store spatial location of each country.
+    """
+
+    __tablename__ = "country_locations"
+
+    id = Column(Integer, primary_key=True)
+    country = Column(String)
+    lon = Column(Float)
+    lat = Column(Float)
 
 
 class APIDataRequests(Base):
@@ -31,3 +44,22 @@ class RawAPIData(Base):
     publish_date = Column(Date)
     country = Column(String, nullable=False)
     timestamp = Column(DateTime, nullable=False)
+
+
+class Production(Base):
+    """
+    "Production-ready" data.
+    """
+
+    __tablename__ = "production"
+
+    id = Column(Integer, primary_key=True)
+    source = Column(String)
+    author = Column(String)
+    title = Column(String)
+    url = Column(String)
+    publish_date = Column(Date)
+    country = Column(String, nullable=False)
+    timestamp = Column(DateTime, nullable=False)
+    lon = Column(Float)
+    lat = Column(Float)
