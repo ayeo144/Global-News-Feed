@@ -1,5 +1,9 @@
 name: ETL-Tests
-on: push
+
+on: 
+  push:
+    branches:
+      - main
 
 jobs:
   test:
@@ -21,15 +25,14 @@ jobs:
           pip install -r etl/requirements.txt
 
       - name: Run unit tests
-        run: python -m pytest --import-mode=append etl/tests/
+        run: python -m pytest -v -m production --import-mode=append etl/tests/
         env:
           NEWS_API_KEY: ${{secrets.NEWS_API_KEY}}
           AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
           AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY}}
           S3_BUCKET_NAME: ${{secrets.S3_BUCKET_NAME}}
-          AWS_DB_INSTANCE_ID: ${{secrets.AWS_DB_INSTANCE}}
-          AWS_DB_USERNAME: ${{secrets.AWS_DB_USERNAME}}
-          AWS_DB_PASSWORD: ${{secrets.AWS_DB_PASSWORD}}
-          AWS_DB_HOST: ${{secrets.AWS_DB_HOST}}
-          AWS_DB_PORT: ${{secrets.AWS_DB_PORT}}
-          AWS_DB_NAME: ${{secrets.AWS_DB_NAME}}
+          DB_USERNAME: ${{secrets.DB_USERNAME}}
+          DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+          DB_HOST: ${{secrets.DB_HOST}}
+          DB_PORT: ${{secrets.DB_PORT}}
+          DB_NAME: ${{secrets.DB_NAME}}
