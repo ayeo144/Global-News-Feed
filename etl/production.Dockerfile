@@ -36,7 +36,7 @@ COPY . /code/
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 # run tests
-RUN pytest -v /code/tests
+RUN pytest -v -m production /code/tests
 
 # run the ETL process
 # CMD ["python", "/code/scripts/run.py"]

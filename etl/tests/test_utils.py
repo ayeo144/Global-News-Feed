@@ -2,6 +2,8 @@ import os
 import sys
 from pathlib import Path
 
+import pytest
+
 SRC_DIR = Path(Path(__file__).parent.parent)
 sys.path.insert(0, str(SRC_DIR))
 
@@ -9,6 +11,7 @@ from src.utils import S3Utils
 from src.config import Env
 
 
+@pytest.mark.production
 def test_S3Utils_dict_to_json(test_data_dir):
     """
     Test the upload, download and deleting of JSON data to/from
