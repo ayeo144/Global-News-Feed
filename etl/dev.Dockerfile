@@ -1,10 +1,10 @@
+# This Dockerfile is for local testing of the set-up
+# of the production database (e.g. db creation, table
+# creation, and inserting data from configuration.
+
 FROM python:3.8-slim
 
 # Get the arguments passed at build-time
-ARG NEWS_API_KEY
-ARG AWS_ACCESS_KEY
-ARG AWS_SECRET_KEY
-ARG S3_BUCKET_NAME
 ARG DB_USERNAME
 ARG DB_PASSWORD
 ARG DB_HOST
@@ -12,10 +12,6 @@ ARG DB_PORT
 ARG DB_NAME
 
 # Set the environment variables required for the Python code
-ENV NEWS_API_KEY ${NEWS_API_KEY}
-ENV AWS_ACCESS_KEY ${AWS_ACCESS_KEY}
-ENV AWS_SECRET_KEY ${AWS_SECRET_KEY}
-ENV S3_BUCKET_NAME ${S3_BUCKET_NAME}
 ENV DB_USERNAME ${DB_USERNAME}
 ENV DB_PASSWORD ${DB_PASSWORD}
 ENV DB_HOST ${DB_HOST}
@@ -35,5 +31,5 @@ COPY . /code/
 # install the requirements
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-# run tests
-RUN pytest -v -m production /code/tests
+# keep container running for dev purposes
+ENTRYPOINT ["tail", "-f", "/dev/null"]

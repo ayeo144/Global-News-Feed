@@ -15,14 +15,13 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - 5432:5432
+      - 5433:5432 # Expose on local port 5433 to avoid conflict with local PG
     volumes:
       - db:/var/lib/postgresql/data
 
   # This uses the ETL package code to run the database
   # set-up script
   etl:
-    restart: always
     build:
       context: ./
       dockerfile: db-local-setup.Dockerfile

@@ -61,19 +61,5 @@ jobs:
         --build-arg DB_PORT=${{ secrets.DB_PORT }} \
         --build-arg DB_NAME=${{ secrets.DB_NAME }} \
         -f production.Dockerfile .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
-    # - name: Execute my ECS Task
-    #   uses: apfm-actions/aws-ecs-exec-action@master
-    #   with:
-    #     project: 'examples'
-    #     cluster: ${{ env.ECS_CLUSTER }}
-    #     name: 'global-news-feed-task'
-    #     image: ${{ steps.build-image.outputs.image }}
-    #     version: 'latest'
-    #     cpu: 256
-    #     memory: 512
-    #     exec_role: 'ecsTaskExecutionRoleDefault'
-    #     wait: true
-    #     timeout: 600
+#        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+#        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
