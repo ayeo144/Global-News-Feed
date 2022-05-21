@@ -46,20 +46,21 @@ class RawAPIData(Base):
     timestamp = Column(DateTime, nullable=False)
 
 
-class Production(Base):
+class Production:
     """
     "Production-ready" data.
     """
 
-    __tablename__ = "production"
+    name = "production"
 
-    id = Column(Integer, primary_key=True)
-    source = Column(String)
-    author = Column(String)
-    title = Column(String)
-    url = Column(String)
-    publish_date = Column(Date)
-    country = Column(String, nullable=False)
-    timestamp = Column(DateTime, nullable=False)
-    lon = Column(Float)
-    lat = Column(Float)
+    def __init__(self, **kwargs):
+        self.id = kwargs["id"]
+        self.source = kwargs["source"]
+        self.author = kwargs["author"]
+        self.title = kwargs["title"]
+        self.url = kwargs["url"]
+        self.publish_date = kwargs["publish_date"]
+        self.country = kwargs["country"]
+        self.timestamp = kwargs["timestamp"]
+        self.lon = kwargs["lon"]
+        self.lat = kwargs["lon"]

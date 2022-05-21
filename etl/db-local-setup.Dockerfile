@@ -23,7 +23,7 @@ RUN apt-get update
 RUN apt-get install -y gcc libpq-dev python-dev
 
 # this creates the working directory inside our container
-WORKDIR code/
+WORKDIR /code
 
 # copy the API code into the working directory
 COPY . /code/

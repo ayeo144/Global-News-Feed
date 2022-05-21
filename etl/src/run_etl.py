@@ -7,7 +7,7 @@ from src.extract import Extractor
 from src.load import Loader
 from src.db import engine, SessionLocal
 from src.utils import read_config, S3Utils
-from src.models import Base, APIDataRequests, RawAPIData
+from src.models import Base, APIDataRequests
 from src.config import Env
 
 

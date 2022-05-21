@@ -24,14 +24,18 @@ services:
   etl:
     build:
       context: ./
-      dockerfile: db-local-setup.Dockerfile
-      args:
-        DB_USERNAME: postgres
-        DB_PASSWORD: postgres
-        DB_HOST: db
-        DB_PORT: 5432
-        DB_NAME: global_news_feed_db
+      dockerfile: dev.Dockerfile
     container_name: etl-code
+    ports:
+      - 8080:8080
+    env_file:
+      - ./envs/.env.dev
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: global_news_feed_db
     depends_on:
       - db
     links:
