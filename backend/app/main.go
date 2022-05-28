@@ -1,36 +1,27 @@
 package main
 
+
 import (
+	u "utils"
+
 	"fmt"
 )
 
 
-// Structure to hold variables in
-type variables struct {
-	name string
-	message string
-}
+func main() {
 
-
-// Function that gets variables from somewhere and
-// populates the `variables` struct, then returns it
-func get_variables() variables {
-
-	vars := variables{
-		name: "Hannah",
-		message: "Hello",
+	// Initialise an instance of the Variables struct and assign some values
+	variables := u.Variables{
+		Name: "Alex",
+		Message: "Hello",
 	}
 
-	return vars
-}
+	// Get the Name and Message from the struct
+	var name string = u.GetName(variables)
+	var message string = u.GetMessage(variables)
 
-
-func main() {
-	
-	var string_message string
-	var message_vars variables = get_variables()
-
-	string_message = message_vars.message + ", " + message_vars.name
+	var string_message string = message + ", " + name
 
 	fmt.Println(string_message)
 }
+
