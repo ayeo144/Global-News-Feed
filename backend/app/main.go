@@ -2,16 +2,40 @@ package main
 
 
 import (
-	"utils"
-
+	"database/sql"
 	"fmt"
+
+	_ "github.com/lib/pq"
+
+	"app/utils"
 )
 
 
 func main() {
 
 	// Get the structure containing the variables for the database connection
-	var db utils.DBVars = utils.GetDBVars()
+	var db_vars utils.DBVars = utils.GetDBVars()
 
-	fmt.Println(db.Host)
+	psqlInfo := fmt.Sprintf(
+		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+		db_vars.Host, 
+		db_vars.Port, 
+		db_vars.Username, 
+		db_vars.Password, 
+		db_vars.Database,
+	)
+
+	db, err := sql.Open("postgres", psqlInfo)
+
+	if err != nil {
+		panic(err)
+	  }
+	  defer db.Close()
+	
+	  err = db.Ping()
+	  if err != nil {
+		panic(err)
+	  }
+
+	fmt.Println(db_vars.Host)
 }
