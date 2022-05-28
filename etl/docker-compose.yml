@@ -24,7 +24,7 @@ services:
   etl:
     build:
       context: ./
-      dockerfile: dev.Dockerfile
+      dockerfile: dockerfiles/dev.Dockerfile
     container_name: etl-code
     ports:
       - 8080:8080

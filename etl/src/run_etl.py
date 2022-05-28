@@ -1,10 +1,10 @@
 import os
 import datetime
 from pathlib import Path
-from typing import Dict
 
 from src.extract import Extractor
 from src.load import Loader
+from src.transform import create_production_table
 from src.db import engine, SessionLocal
 from src.utils import read_config, S3Utils
 from src.models import Base, APIDataRequests
@@ -18,7 +18,7 @@ Base.metadata.create_all(bind=engine)
 
 def run_extract():
     """
-    Run the E process.
+    Run the raw data extraction process.
 
         1. Query API and get JSON response.
         2. Save JSON responses to files.
@@ -50,13 +50,20 @@ def _add_raw_data_record(path, metadata_file):
 
     session = SessionLocal()
 
-    new_record = APIDataRequests(
-        **{"path": str(path), "metadata_file": str(metadata_file)}
-    )
-    session.add(new_record)
+    try:
 
-    session.commit()
-    session.close()
+        new_record = APIDataRequests(
+            **{"path": str(path), "metadata_file": str(metadata_file)}
+        )
+        session.add(new_record)
+
+        session.commit()
+
+    except Exception as e:
+        session.rollback()
+        raise e
+    finally:
+        session.close()
 
 
 def run_load():
@@ -73,11 +80,32 @@ def run_load():
 
 
 def _get_last_metadata_file() -> str:
+    """
+    Get the last metadata.json file created containing filepaths
+    of the API responses for each different country from the latest
+    data extraction.
+    """
+    
     session = SessionLocal()
 
-    record = session.query(APIDataRequests).order_by(APIDataRequests.id.desc()).first()
-    metadata_file = record.metadata_file
+    try:
 
-    session.close()
+        record = session.query(APIDataRequests).order_by(APIDataRequests.id.desc()).first()
+        metadata_file = record.metadata_file
+
+    except Exception as e:
+        session.rollback()
+        raise e
+    finally:
+        session.close()
 
     return metadata_file
+
+
+def run_transform():
+    """
+    Take the latest API responses in the database and create the
+    "production" tabl which can be readily consumed by the application.
+    """
+
+    create_production_table()

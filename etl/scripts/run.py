@@ -4,7 +4,7 @@ from pathlib import Path
 SRC_DIR = Path(Path(__file__).parent.parent)
 sys.path.insert(0, str(SRC_DIR))
 
-from src.run_etl import run_extract, run_load
+from src.run_etl import run_extract, run_load, run_transform
 
 
 def main():
@@ -14,6 +14,7 @@ def main():
 
     run_extract()
     run_load() 
+    run_transform()
 
 
 if __name__ == "__main__":

@@ -32,6 +32,9 @@ class APIDataRequests(Base):
 class RawAPIData(Base):
     """
     Table to store the records from JSON API responses.
+
+    id, country and timestamp column are added within the
+    workflow and not from the API response.
     """
 
     __tablename__ = "raw_api_data"
