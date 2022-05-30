@@ -5,16 +5,32 @@ package utils
 
 import (
 	"os"
+	"strconv"
+	"fmt"
 )
 
 
 // Struct to hold variables required for DB connection
 type DBVars struct {
 	Host string
-	Port string
+	Port int
 	Username string
 	Password string
 	Database string
+}
+
+
+func get_port() int {
+
+	port, err := strconv.Atoi(os.Getenv("PORT"))
+
+    if err != nil {
+        // handle error
+        fmt.Println(err)
+        os.Exit(2)
+    }
+
+	return port
 }
 
 
@@ -24,7 +40,7 @@ func GetDBVars() DBVars {
 
 	Vars := DBVars{
 		Host: os.Getenv("HOST"),
-		Port: os.Getenv("PORT"),
+		Port: get_port(),
 		Username: os.Getenv("USERNAME"),
 		Password: os.Getenv("PASSWORD"),
 		Database: os.Getenv("DATABASE"),

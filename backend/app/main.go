@@ -37,5 +37,7 @@ func main() {
 		panic(err)
 	  }
 
+	db.Close()
+
 	fmt.Println(db_vars.Host)
 }
