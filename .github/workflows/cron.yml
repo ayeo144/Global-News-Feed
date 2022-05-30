@@ -2,7 +2,7 @@ name: Cron Task
 
 on:
   schedule: 
-    - cron: * * * * *
+    - cron: '* * * * *'
 
 jobs:
   run:
