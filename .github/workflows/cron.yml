@@ -5,7 +5,7 @@ on:
     - cron: '* * * * *'
 
 jobs:
-  run:
+  run_task:
     name: Run Task
     runs-on: ubuntu-latest
 
