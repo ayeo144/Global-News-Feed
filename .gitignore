@@ -164,3 +164,4 @@ cython_debug/
 
 # compiled code files
 backend/app/compiled
+backend/app/vendor/github.com

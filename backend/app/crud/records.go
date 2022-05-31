@@ -1,5 +1,6 @@
-package crud
+// CRUD operations on database to get Records
 
+package crud
 
 import (
 	"time"

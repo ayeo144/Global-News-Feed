@@ -1,13 +1,15 @@
 FROM golang:1.18.2-bullseye
 
-# RUN mkdir /code
+RUN mkdir /code
 
-# COPY . /code/
+COPY . /code/
+
+WORKDIR /code/app/
 
 # Download go modules
-# RUN go mod download
+RUN go mod vendor
 
 # Build the application
-# RUN go build -o
+RUN go build -o ./compiled/
 
 ENTRYPOINT ["tail", "-f", "/dev/null"]

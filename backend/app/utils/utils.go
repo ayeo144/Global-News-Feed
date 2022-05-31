@@ -7,6 +7,9 @@ import (
 	"os"
 	"strconv"
 	"fmt"
+	"database/sql"
+
+	_ "github.com/lib/pq"
 )
 
 
@@ -67,5 +70,21 @@ func GetDbInfo() string {
 	)
 
 	return DbInfo
+
+}
+
+
+func SetupDb() *sql.DB {
+
+	var db_info string = GetDbInfo()
+
+	Db, err := sql.Open("postgres", db_info)
+
+	if err != nil {
+		Db.Close()
+		panic(err)
+	  }
+	  
+	return Db
 
 }

@@ -1,38 +1,27 @@
+// Main Application package for REST API working on top
+// of Postgres database.
+
 package main
 
 
 import (
-	"fmt"
-	"database/sql"
+	"log"
+	"net/http"
 
-	_ "github.com/lib/pq"
+	"github.com/gorilla/mux"
 
-	"app/utils"
-	"app/crud"
+	"app/endpoints"
 )
 
 
 func main() {
+	// Main function for application, creates the router and adds the endpoints
+	// then serves on a selected port.
 
-	// Get the structure containing the variables for the database connection
-	var db_info string = utils.GetDbInfo()
+	router := mux.NewRouter()
 
-	db, err := sql.Open("postgres", db_info)
+	router.HandleFunc("/records/", endpoints.GetRecordsEndpoint).Methods("GET")
 
-	if err != nil {
-		panic(err)
-	  }
-	  defer db.Close()
-	
-	  err = db.Ping()
-	  if err != nil {
-		panic(err)
-	  }
-
-	records := crud.GetRecords(db)
-
-	fmt.Println(records[0].Id)
-
-	db.Close()
+	log.Fatal(http.ListenAndServe(":8000", router))
 
 }
