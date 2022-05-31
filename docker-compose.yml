@@ -1,14 +1,9 @@
-# docker-compose for local testing of the database
-# environment used during the ETL processes.
-#
-# A PostgreSQL database service is created to store
-# data extracted from the API during the ETL process.
+# compose file for local testing of 'full-stack'
 
 version: "3.9"
 
 services:
 
-  # This is the database service for the ETL process
   db:
     image: postgres:14.1-alpine
     container_name: db
@@ -16,21 +11,39 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - 5433:5432 # Expose on local port 5433 to avoid conflict with local PG
+      - 5433:5432
     volumes:
       - db:/var/lib/postgresql/data
 
-  # This uses the ETL package code to run the database
-  # set-up script
   etl:
     build:
-      context: ./
+      context: ./etl/
       dockerfile: dockerfiles/dev.Dockerfile
-    container_name: etl-code
+    container_name: etl
     ports:
       - 8080:8080
     env_file:
-      - ./envs/.env.dev
+      - ./etl/envs/.env.dev
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: global_news_feed_db
+    depends_on:
+      - db
+    links:
+      - db:db
+
+  backend:
+    build:
+      context: ./backend/
+      dockerfile: dev.Dockerfile
+    container_name: backend
+    volumes:
+      - type: bind
+        source: ./backend/
+        target: /mnt/
     environment:
       DB_USERNAME: postgres
       DB_PASSWORD: postgres

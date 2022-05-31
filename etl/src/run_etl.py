@@ -5,15 +5,13 @@ from pathlib import Path
 from src.extract import Extractor
 from src.load import Loader
 from src.transform import create_production_table
-from src.db import engine, SessionLocal
+from src.db import SessionLocal
 from src.utils import read_config, S3Utils
-from src.models import Base, APIDataRequests
+from src.models import APIDataRequests
 from src.config import Env
 
 
 ETL_CFG = Path(Path(__file__).parent.parent, "cfg", "etl-cfg.yml")
-
-Base.metadata.create_all(bind=engine)
 
 
 def run_extract():

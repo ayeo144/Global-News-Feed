@@ -1,8 +1,8 @@
 FROM golang:1.18.2-bullseye
 
-WORKDIR /code
+# RUN mkdir /code
 
-COPY . /code/
+# COPY . /code/
 
 # Download go modules
 # RUN go mod download

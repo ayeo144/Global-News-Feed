@@ -2,30 +2,22 @@ package main
 
 
 import (
-	"database/sql"
 	"fmt"
+	"database/sql"
 
 	_ "github.com/lib/pq"
 
 	"app/utils"
+	"app/crud"
 )
 
 
 func main() {
 
 	// Get the structure containing the variables for the database connection
-	var db_vars utils.DBVars = utils.GetDBVars()
+	var db_info string = utils.GetDbInfo()
 
-	psqlInfo := fmt.Sprintf(
-		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		db_vars.Host, 
-		db_vars.Port, 
-		db_vars.Username, 
-		db_vars.Password, 
-		db_vars.Database,
-	)
-
-	db, err := sql.Open("postgres", psqlInfo)
+	db, err := sql.Open("postgres", db_info)
 
 	if err != nil {
 		panic(err)
@@ -37,7 +29,10 @@ func main() {
 		panic(err)
 	  }
 
+	records := crud.GetRecords(db)
+
+	fmt.Println(records[0].Id)
+
 	db.Close()
 
-	fmt.Println(db_vars.Host)
 }
