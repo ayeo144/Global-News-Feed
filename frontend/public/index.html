@@ -1,13 +1,33 @@
 <!DOCTYPE html>
 <html>
+
+<head>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"/>
+
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+
+</head>
+
 <body>
 
-<h1>News Feed</h1>
-<p>Headlines:</p>
+<!-- <h1>News Feed</h1>
+<p>Headlines:</p> -->
 
-<div id="items"></div>
+<div id="map" style="width:800px; height: 500px;"></div>
 
-<script src="script.js"></script>
+<script>
+
+var coords = [37.69, -59.23]; // the geographic center of our map
+var zoomLevel = 3; // the map scale. See: http://wiki.openstreetmap.org/wiki/Zoom_levels
+
+var map = L.map('map').setView(coords, zoomLevel);
+
+</script>
+
+<!-- <div id="items"></div>
+
+<script src="script.js"></script> -->
 
 </body>
 </html>

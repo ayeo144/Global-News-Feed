@@ -64,7 +64,6 @@ services:
     container_name: frontend
     ports:
       - 80:80
-      - 81:81
     depends_on:
       - backend
     links:
