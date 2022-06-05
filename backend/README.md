@@ -28,3 +28,14 @@ here we are writing the compiled files to a folder in `<module-name>/compiled/`.
 Running the compiled code:
 
 `./compiled/<module-name>`
+
+### CORS Problem/Solution
+
+When running the docker-compose, the frontend service was not able to query the backend
+service REST API due to a CORS error - "Cross-Origin Request Blocked". I first tried several
+approaches to reconfiguring nginx (which the frontend service was running on), such as using
+a proxy for the backend service URL in the hope that the frontend could access it. 
+<br>
+Ultimately, it was configuring the backend code and adding specific headers to all the requests
+that allowed for cross-origin requests to be made. This resource was extremely helpful for getting
+the problem solved: https://stackoverflow.com/questions/39507065/enable-cors-in-golang.

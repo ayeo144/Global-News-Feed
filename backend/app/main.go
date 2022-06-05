@@ -20,8 +20,9 @@ func main() {
 
 	router := mux.NewRouter()
 
-	router.HandleFunc("/records/", endpoints.GetRecordsEndpoint).Methods("GET")
+	// Need to include "OPTIONS" here as a method to enable CORS
+	router.HandleFunc("/records/", endpoints.GetRecordsEndpoint).Methods("GET", "OPTIONS")
 
-	log.Fatal(http.ListenAndServe(":8000", router))
+	log.Fatal(http.ListenAndServe(":8081", router))
 
 }

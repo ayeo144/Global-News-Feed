@@ -12,4 +12,4 @@ RUN go mod vendor
 # Build the application
 RUN go build -o ./compiled/
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+CMD ["./compiled/app"]

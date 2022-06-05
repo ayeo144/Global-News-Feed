@@ -29,6 +29,12 @@ func GetRecordsEndpoint(w http.ResponseWriter, r *http.Request) {
 
 	// Construct the JSON response object containing the records
 	var response = RecordResponse{Type: "success", Data: records}
+
+    //Allow CORS here By * or specific origin
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	// Encode the response object
 	json.NewEncoder(w).Encode(response)
 
 }

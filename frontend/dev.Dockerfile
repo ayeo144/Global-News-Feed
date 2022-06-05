@@ -1,7 +1,8 @@
-FROM node:latest
+FROM nginx:stable-alpine
 
-WORKDIR /usr/app
+RUN apk add --update nodejs npm
 
-RUN npm install node-fetch
+COPY . /usr/share/nginx/html
+COPY /configs/nginx.conf /etc/nginx/nginx.conf
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+CMD ["nginx", "-g", "daemon off;"]

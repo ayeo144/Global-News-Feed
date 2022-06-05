@@ -41,7 +41,7 @@ services:
       dockerfile: dev.Dockerfile
     container_name: backend
     ports:
-      - 8000:8000
+      - 8081:8081
     volumes:
       - type: bind
         source: ./backend/
@@ -56,6 +56,19 @@ services:
       - db
     links:
       - db:db
+
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: dev.Dockerfile
+    container_name: frontend
+    ports:
+      - 80:80
+      - 81:81
+    depends_on:
+      - backend
+    links:
+      - backend:backend
 
 volumes:
   db:
